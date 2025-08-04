@@ -82,6 +82,15 @@ navLinks.forEach(link => {
                 block: 'start'
             });
         }
+        
+        // Close mobile menu after clicking a link
+        const navbarCollapse = document.querySelector('.navbar-collapse');
+        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+            const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                toggle: false
+            });
+            bsCollapse.hide();
+        }
     });
 });
 
@@ -405,19 +414,19 @@ visionCards.forEach(card => {
     });
 });
 
-// Mobile menu toggle
+// Mobile menu toggle - Use Bootstrap's built-in functionality
 const navbarToggler = document.querySelector('.navbar-toggler');
 const navbarCollapse = document.querySelector('.navbar-collapse');
 
 if (navbarToggler && navbarCollapse) {
-    navbarToggler.addEventListener('click', () => {
-        navbarCollapse.classList.toggle('show');
-    });
-    
     // Close mobile menu when clicking on a link
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            navbarCollapse.classList.remove('show');
+            // Use Bootstrap's collapse method
+            const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                toggle: false
+            });
+            bsCollapse.hide();
         });
     });
 }
@@ -494,7 +503,49 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         initParticles();
     }, 1500);
+    
+    // Initialize typing animation
+    console.log('DOMContentLoaded event tetiklendi');
+    setTimeout(() => {
+        console.log('Typing animation başlatılıyor...');
+        initTypingAnimation();
+    }, 2000); // Loading animasyonu bittikten sonra başla
 });
+
+// Typing Animation Function
+function initTypingAnimation() {
+    console.log('Typing animation başlatılıyor...');
+    
+    const typingText = document.querySelector('.typing-text');
+    
+    console.log('typingText:', typingText);
+    
+    if (typingText) {
+        const originalText = typingText.textContent;
+        console.log('Original text:', originalText);
+        
+        // Her seferinde temizle
+        typingText.textContent = '';
+        typingText.style.opacity = '0';
+        
+        let i = 0;
+        const typeWriter = () => {
+            if (i === 0) {
+                typingText.style.opacity = '1'; // Yazı yazılmaya başladığında görünür yap
+            }
+            if (i < originalText.length) {
+                typingText.textContent += originalText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 600); // Daha yavaş yazma (0.6 saniye)
+            }
+        };
+        
+        // Start typing after page loads - makul bekleme
+        setTimeout(typeWriter, 3000); // 3 saniye bekleme
+    } else {
+        console.log('Typing element bulunamadı!');
+    }
+}
 
 // Particle.js Configuration
 function initParticles() {
